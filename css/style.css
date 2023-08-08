@@ -1,0 +1,210 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100dvh;
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  color: #222;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 500;
+}
+
+.main {
+  width: 100%;
+  height: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px;
+  text-align: center;
+  margin: 0 auto;
+}
+.main__title {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+}
+.main__date-input {
+  font-family: "Inter", sans-serif;
+  padding: 8px 18px;
+  font-size: 14px;
+  line-height: 17px;
+  color: #222;
+  border-radius: 5px;
+  border: 1px solid #222;
+  background-color: #fff;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+.main__plug {
+  margin-top: calc(50dvh - 217.5px);
+  margin-bottom: calc(50dvh - 197.5px);
+}
+.main__recent-drinks {
+  margin-top: 35px;
+  margin-bottom: auto;
+}
+.main__add-button {
+  width: 100%;
+  padding: 10px 100px;
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  background-color: #006dd2;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.main__add-button:hover {
+  color: rgba(255, 255, 255, 0.5);
+}
+.main__add-button:active {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.progress-bar {
+  position: relative;
+  background-color: #949494;
+  width: 100%;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress-bar__bar {
+  width: 0%;
+  height: 100%;
+  background-color: #006dd2;
+  border-radius: 10px 10px 10px 10px;
+}
+.progress-bar__label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.plug {
+  display: none;
+}
+.plug__image {
+  width: 100px;
+  margin-bottom: 25px;
+}
+.plug__text {
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 600;
+  color: #949494;
+}
+
+.recent-drinks {
+  width: 100%;
+  text-align: left;
+  overflow-y: scroll;
+}
+.recent-drinks__title {
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.recent-drinks__list {
+  list-style: none;
+}
+.recent-drinks__drink {
+  margin-bottom: 20px;
+}
+.recent-drinks__drink:last-child {
+  margin-bottom: 0;
+}
+
+.drink {
+  display: flex;
+  align-items: center;
+}
+.drink__image {
+  height: 25px;
+  margin-right: 15px;
+}
+.drink__info {
+  margin-right: auto;
+}
+.drink__title {
+  font-size: 16px;
+  line-height: 19px;
+}
+.drink__time {
+  font-size: 14px;
+  line-height: 17px;
+  color: #949494;
+}
+.drink__amount {
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 600;
+  margin-right: 20px;
+}
+.drink__edit-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.drink__edit-button svg {
+  width: 20px;
+  height: 20px;
+}
+.drink__remove-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.drink__remove-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.menu {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.menu__link {
+  text-decoration: none;
+}
+.menu__link:hover path {
+  fill: #006dd2;
+}
+.menu__link:active path {
+  fill: #006dd2;
+}
+.menu__link_current path {
+  fill: #006dd2;
+}
+.menu__icon {
+  height: 40px;
+}
+.menu__icon path {
+  transition: all 0.2s;
+}
