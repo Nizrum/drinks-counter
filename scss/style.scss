@@ -402,3 +402,83 @@ body {
         border-radius: 50%;
     }
 }
+
+.settings {
+    width: 100%;
+    height: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 10px;
+    text-align: center;
+    margin: 0 auto;
+
+    &__title {
+        font-size: 16px;
+        line-height: 19px;
+        margin-bottom: 35px;
+    }
+
+    &__fields {
+        text-align: left;
+        margin-bottom: auto;
+    }
+
+    &__daily-target {
+        margin-bottom: 25px;
+    }
+
+    &__setting-select {
+        margin-bottom: 25px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &__menu {
+        margin-top: 20px;
+    }
+}
+
+.daily-target {
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    flex-wrap: wrap;
+
+    &__label {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    &__input {
+        width: 100%;
+        background-color: #949494;
+        cursor: pointer;
+    }
+}
+
+.setting-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__label {
+        display: inline-block;
+        font-size: 16px;
+        line-height: 19px;
+        margin-right: 20px;
+    }
+
+    &__select {
+        font-family: "Inter", sans-serif;
+        font-size: 16px;
+        line-height: 19px;
+        color: #222;
+    }
+}
