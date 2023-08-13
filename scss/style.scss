@@ -50,8 +50,8 @@ body {
     }
 
     &__plug {
-        margin-top: calc(50dvh - 217.5px);
-        margin-bottom: calc(50dvh - 197.5px);
+        margin-top: calc(50dvh - 211.5px);
+        margin-bottom: calc(50dvh - 211.5px);
     }
 
     &__recent-drinks {
@@ -61,7 +61,7 @@ body {
 
     &__add-button {
         width: 100%;
-        padding: 10px 100px;
+        padding: 10px;
         font-size: 16px;
         line-height: 19px;
         font-weight: 600;
@@ -113,7 +113,6 @@ body {
 }
 
 .plug {
-    display: none;
 
     &__image {
         width: 100px;
@@ -125,6 +124,10 @@ body {
         line-height: 19px;
         font-weight: 600;
         color: #949494;
+    }
+
+    &_hidden {
+        display: none;
     }
 }
 
@@ -150,6 +153,10 @@ body {
         &:last-child {
             margin-bottom: 0;
         }
+    }
+
+    &_hidden {
+        display: none;
     }
 }
 
@@ -189,7 +196,7 @@ body {
         border: none;
         cursor: pointer;
         margin-right: 20px;
-        
+
         svg {
             width: 20px;
             height: 20px;
@@ -208,12 +215,98 @@ body {
     }
 }
 
+.add-popup {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 20px);
+    max-width: 430px;
+    background-color: #fff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 2px 10px 1px #949494;
+    padding: 20px;
+
+    &__text {
+        width: 100%;
+        font-size: 16px;
+        line-height: 19px;
+        margin-bottom: 20px;
+    }
+
+    &__selects {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__select {
+        font-family: "Inter", sans-serif;
+        font-size: 16px;
+        line-height: 19px;
+        color: #222;
+        padding: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &_oz {
+            display: none;
+        }
+    }
+
+    &__add-button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        line-height: 19px;
+        font-weight: 600;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        background-color: #006dd2;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 20px;
+
+        &:hover {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        &:active {
+            color: rgba(255, 255, 255, 0.5);
+        }
+    }
+
+    &__cancel-button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        line-height: 19px;
+        font-weight: 600;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        background-color: #cc2702;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 20px;
+
+        &:hover {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        &:active {
+            color: rgba(255, 255, 255, 0.5);
+        }
+    }
+}
+
 .menu {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+
 
 
     &__link {
@@ -234,7 +327,7 @@ body {
         }
 
         &_current {
-            
+
             path {
                 fill: #006dd2;
             }
@@ -321,7 +414,7 @@ body {
         width: 0;
         height: 0;
         cursor: pointer;
-        
+
         &::after {
             content: "";
             position: absolute;
