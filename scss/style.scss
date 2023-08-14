@@ -94,10 +94,11 @@ body {
     overflow: hidden;
 
     &__bar {
-        width: 0%;
+        width: 0;
         height: 100%;
         background-color: #006dd2;
         border-radius: 10px 10px 10px 10px;
+        transition: width 0.2s;
     }
 
     &__label {

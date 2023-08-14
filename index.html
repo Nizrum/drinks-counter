@@ -24,7 +24,9 @@
         <h1 class="main__title">Main page</h1>
         <input type="date" class="main__date-input" value="2023-08-07">
         <div class="main__progress-bar progress-bar">
-            <p class="progress-bar__label">0/3000 ml</p>
+            <p class="progress-bar__label">
+                <span class="progress-bar__current-volume">0</span>/<span class="progress-bar__target-volume">3000</span> ml
+            </p>
             <div class="progress-bar__bar"></div>
         </div>
         <div class="main__plug plug">
@@ -108,7 +110,7 @@
                     <option value="128">128 oz</option>
                 </select>
             </div>
-            <button class="add-popup__add-button">Add</button>
+            <button class="add-popup__add-button" data-role="add">Add</button>
             <button class="add-popup__cancel-button">Cancel</button>
         </dialog>
     </main>
