@@ -146,9 +146,13 @@ body {
   display: flex;
   align-items: center;
 }
+.drink__image-container {
+  width: 30px;
+  text-align: left;
+  margin-right: 15px;
+}
 .drink__image {
   height: 25px;
-  margin-right: 15px;
 }
 .drink__info {
   margin-right: auto;

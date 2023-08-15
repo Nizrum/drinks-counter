@@ -20,7 +20,9 @@ function addDrink(type, volume, units, time) {
         "beforeend",
         `
         <li class="recent-drinks__drink drink">
-            <img src="images/${type.replace(/ /g, "-")}.svg" alt="${type} icon" class="drink__image">
+            <div class="drink__image-container">
+                <img src="images/${type.replace(/ /g, "-")}.svg" alt="${type} icon" class="drink__image">
+            </div>
             <div class="drink__info">
                 <h3 class="drink__title">${type[0].toUpperCase() + type.slice(1)}</h3>
                 <p class="drink__time">${String(time.getHours()) + ":" + String(time.getMinutes()).padStart(2, "0")}</p>

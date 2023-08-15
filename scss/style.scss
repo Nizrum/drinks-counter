@@ -165,9 +165,14 @@ body {
     display: flex;
     align-items: center;
 
+    &__image-container {
+        width: 30px;
+        text-align: left;
+        margin-right: 15px;
+    }
+
     &__image {
         height: 25px;
-        margin-right: 15px;
     }
 
     &__info {
