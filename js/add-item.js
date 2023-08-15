@@ -47,6 +47,23 @@ function addDrink(type, volume, units, time) {
     changeProgressBar(currentVolume);
 }
 
+function changeDrink(currentDrink, type, volume) {
+    let image = currentDrink.querySelector(".drink__image");
+    let title = currentDrink.querySelector(".drink__title");
+    let amount = currentDrink.querySelector(".drink__amount");
+    let editButton = currentDrink.querySelector(".drink__edit-button");
+    let removeButton = currentDrink.querySelector(".drink__remove-button");
+    currentVolume += volume - Number(removeButton.dataset.volume);
+    changeProgressBar(currentVolume);
+    image.setAttribute("src", `images/${type.replace(/ /g, "-")}.svg`);
+    image.setAttribute("alt", `${type} icon`);
+    title.textContent = type[0].toUpperCase() + type.slice(1);
+    amount.textContent = amount.textContent.replace(/\d+/g, volume);
+    editButton.dataset.volume = volume;
+    editButton.dataset.type = type;
+    removeButton.dataset.volume = volume;
+}
+
 function changeProgressBar(volume) {
     let newWidth = (volume / 3000) * progressContainer.clientWidth;
     progressBar.style.width =
@@ -56,6 +73,8 @@ function changeProgressBar(volume) {
 
 closeModalButton.addEventListener("click", () => {
     modal.close();
+    addButton.dataset.role = "add";
+    addButton.textContent = "Add";
 });
 
 openModalButton.addEventListener("click", () => {
@@ -63,18 +82,34 @@ openModalButton.addEventListener("click", () => {
 });
 
 addButton.addEventListener("click", () => {
-    addDrink(typeSelect.value, mlVolumeSelect.value, "ml", new Date());
+    if (addButton.dataset.role == "edit") {
+        let currentDrink = document.querySelectorAll(".drink")[Number(addButton.dataset.editIndex)];
+        changeDrink(currentDrink, typeSelect.value, mlVolumeSelect.value);
+        addButton.dataset.role = "add";
+        addButton.textContent = "Add";
+    } else {
+        addDrink(typeSelect.value, mlVolumeSelect.value, "ml", new Date());
+    }
     modal.close();
 });
 
 drinksList.addEventListener("click", (event) => {
-    if (event.target.closest(".drink__remove-button")) {
-        currentVolume -= Number(event.target.closest(".drink__remove-button").dataset.volume);
+    let target = event.target;
+    if (target.closest(".drink__remove-button")) {
+        currentVolume -= Number(target.closest(".drink__remove-button").dataset.volume);
         changeProgressBar(currentVolume);
-        event.target.closest(".drink").remove();
+        target.closest(".drink").remove();
         if (drinksList.innerHTML.trim() == "") {
             plug.classList.remove("plug_hidden");
             recentDrinksSection.classList.add("recent-drinks_hidden");
         }
+    }
+    if (target.closest(".drink__edit-button")) {
+        addButton.dataset.role = "edit";
+        addButton.dataset.editIndex = [...document.querySelectorAll(".drink")].indexOf(target.closest(".drink"));
+        addButton.textContent = "Save";
+        mlVolumeSelect.value = target.closest(".drink__edit-button").dataset.volume;
+        typeSelect.value = target.closest(".drink__edit-button").dataset.type;
+        modal.showModal();
     }
 });
