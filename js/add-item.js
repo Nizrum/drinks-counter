@@ -11,9 +11,12 @@ const ozVolumeSelect = document.querySelector(".add-popup__select_oz");
 const progressContainer = document.querySelector(".progress-bar");
 const progressBar = document.querySelector(".progress-bar__bar");
 const progressCurrentVolume = document.querySelector(".progress-bar__current-volume");
+const dateInput = document.querySelector(".main__date-input");
 let now = new Date();
-let dataString = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
-let allDrinks = localStorage.getItem('drinksData') ? JSON.parse(localStorage.getItem('drinksData'))[dataString] || [] : [];
+dateInput.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getDate()}`;
+let allDrinks = localStorage.getItem("drinksData")
+    ? JSON.parse(localStorage.getItem("drinksData"))[dateInput.value] || []
+    : [];
 let currentID = 0;
 
 function renderDrinks(drinks) {
@@ -60,7 +63,6 @@ function renderDrinks(drinks) {
         recentDrinksSection.classList.add("recent-drinks_hidden");
         changeProgressBar(0);
     }
-
 }
 
 function addDrink(type, volume, units, time) {
@@ -69,7 +71,7 @@ function addDrink(type, volume, units, time) {
         type,
         volume,
         units,
-        time: `${time.getHours()}:${String(time.getMinutes()).padStart(2, '0')}`,
+        time: `${time.getHours()}:${String(time.getMinutes()).padStart(2, "0")}`,
     });
     currentID++;
     renderDrinks(allDrinks);
@@ -102,9 +104,9 @@ function changeProgressBar(volume) {
 }
 
 function saveToLocalStorage(drinks) {
-    let data = JSON.parse(localStorage.getItem('drinksData')) || {};
-    data[dataString] = drinks;
-    localStorage.setItem('drinksData', JSON.stringify(data));
+    let data = JSON.parse(localStorage.getItem("drinksData")) || {};
+    data[dateInput.value] = drinks;
+    localStorage.setItem("drinksData", JSON.stringify(data));
 }
 
 closeModalButton.addEventListener("click", () => {
@@ -142,6 +144,13 @@ drinksList.addEventListener("click", (event) => {
         addButton.dataset.editID = currentDrink.id;
         modal.showModal();
     }
+});
+
+dateInput.addEventListener("change", () => {
+    allDrinks = localStorage.getItem("drinksData")
+        ? JSON.parse(localStorage.getItem("drinksData"))[dateInput.value] || []
+        : [];
+    renderDrinks(allDrinks);
 });
 
 renderDrinks(allDrinks);
