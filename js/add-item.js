@@ -13,7 +13,7 @@ const progressBar = document.querySelector(".progress-bar__bar");
 const progressCurrentVolume = document.querySelector(".progress-bar__current-volume");
 let now = new Date();
 let dataString = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
-let allDrinks = JSON.parse(localStorage.getItem('drinksData'))[dataString] || [];
+let allDrinks = localStorage.getItem('drinksData') ? JSON.parse(localStorage.getItem('drinksData'))[dataString] || [] : [];
 let currentID = 0;
 
 function renderDrinks(drinks) {
@@ -69,7 +69,7 @@ function addDrink(type, volume, units, time) {
         type,
         volume,
         units,
-        time: `${time.getHours()}:${time.getMinutes()}`,
+        time: `${time.getHours()}:${String(time.getMinutes()).padStart(2, '0')}`,
     });
     currentID++;
     renderDrinks(allDrinks);
@@ -102,7 +102,7 @@ function changeProgressBar(volume) {
 }
 
 function saveToLocalStorage(drinks) {
-    let data = JSON.parse(localStorage.getItem('drinksData'));
+    let data = JSON.parse(localStorage.getItem('drinksData')) || {};
     data[dataString] = drinks;
     localStorage.setItem('drinksData', JSON.stringify(data));
 }
