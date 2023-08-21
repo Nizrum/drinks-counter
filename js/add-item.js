@@ -15,9 +15,7 @@ const progressTargetVolume = document.querySelector(".progress-bar__target-volum
 const dateInput = document.querySelector(".main__date-input");
 let now = new Date();
 dateInput.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getDate()}`;
-let allDrinks = localStorage.getItem("drinksData")
-    ? JSON.parse(localStorage.getItem("drinksData"))[dateInput.value] || []
-    : [];
+let allDrinks = [];
 let currentID = 0;
 
 function renderDrinks(drinks) {
@@ -98,7 +96,7 @@ function changeDrink(id, type, volume) {
 }
 
 function changeProgressBar(volume) {
-    let dailyTarget = JSON.parse(localStorage.getItem('dailyTarget'));
+    let dailyTarget = JSON.parse(localStorage.getItem("dailyTarget")) || 3000;
     progressTargetVolume.textContent = dailyTarget;
     let newWidth = (volume / dailyTarget) * progressContainer.clientWidth;
     progressBar.style.width =
@@ -106,9 +104,23 @@ function changeProgressBar(volume) {
     progressCurrentVolume.textContent = volume;
 }
 
+function getDataFromLocalStorage() {
+    allDrinks = [];
+    currentID = 0;
+    if (localStorage.getItem("drinksData")) {
+        let selectedDayData = JSON.parse(localStorage.getItem("drinksData"))[dateInput.value];
+        if (selectedDayData) {
+            allDrinks = selectedDayData["drinksList"];
+            currentID = selectedDayData["currentID"];
+        }
+    }
+}
+
 function saveToLocalStorage(drinks) {
     let data = JSON.parse(localStorage.getItem("drinksData")) || {};
-    data[dateInput.value] = drinks;
+    data[dateInput.value] = {};
+    data[dateInput.value]["drinksList"] = drinks;
+    data[dateInput.value]["currentID"] = currentID;
     localStorage.setItem("drinksData", JSON.stringify(data));
 }
 
@@ -150,10 +162,9 @@ drinksList.addEventListener("click", (event) => {
 });
 
 dateInput.addEventListener("change", () => {
-    allDrinks = localStorage.getItem("drinksData")
-        ? JSON.parse(localStorage.getItem("drinksData"))[dateInput.value] || []
-        : [];
+    getDataFromLocalStorage();
     renderDrinks(allDrinks);
 });
 
+getDataFromLocalStorage();
 renderDrinks(allDrinks);
