@@ -11,6 +11,7 @@ const ozVolumeSelect = document.querySelector(".add-popup__select_oz");
 const progressContainer = document.querySelector(".progress-bar");
 const progressBar = document.querySelector(".progress-bar__bar");
 const progressCurrentVolume = document.querySelector(".progress-bar__current-volume");
+const progressTargetVolume = document.querySelector(".progress-bar__target-volume");
 const dateInput = document.querySelector(".main__date-input");
 let now = new Date();
 dateInput.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getDate()}`;
@@ -97,7 +98,9 @@ function changeDrink(id, type, volume) {
 }
 
 function changeProgressBar(volume) {
-    let newWidth = (volume / 3000) * progressContainer.clientWidth;
+    let dailyTarget = JSON.parse(localStorage.getItem('dailyTarget'));
+    progressTargetVolume.textContent = dailyTarget;
+    let newWidth = (volume / dailyTarget) * progressContainer.clientWidth;
     progressBar.style.width =
         String(newWidth <= progressContainer.clientWidth ? newWidth : progressContainer.clientWidth) + "px";
     progressCurrentVolume.textContent = volume;

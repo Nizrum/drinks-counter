@@ -444,6 +444,7 @@ body {
 .settings__fields {
   text-align: left;
   margin-bottom: auto;
+  width: 100%;
 }
 .settings__daily-target {
   margin-bottom: 25px;
