@@ -1,3 +1,4 @@
+const body = document.querySelector(".body");
 const modal = document.querySelector(".add-popup");
 const openModalButton = document.querySelector(".main__add-button");
 const closeModalButton = document.querySelector(".add-popup__cancel-button");
@@ -17,6 +18,8 @@ let now = new Date();
 dateInput.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getDate()}`;
 let allDrinks = [];
 let currentID = 0;
+let dailyTarget = 3000;
+let colorTheme = "light";
 
 function renderDrinks(drinks) {
     drinksList.innerHTML = "";
@@ -96,7 +99,6 @@ function changeDrink(id, type, volume) {
 }
 
 function changeProgressBar(volume) {
-    let dailyTarget = JSON.parse(localStorage.getItem("dailyTarget")) || 3000;
     progressTargetVolume.textContent = dailyTarget;
     let newWidth = (volume / dailyTarget) * progressContainer.clientWidth;
     progressBar.style.width =
@@ -107,6 +109,9 @@ function changeProgressBar(volume) {
 function getDataFromLocalStorage() {
     allDrinks = [];
     currentID = 0;
+    dailyTarget = JSON.parse(localStorage.getItem("dailyTarget")) || 3000;
+    colorTheme = JSON.parse(localStorage.getItem("colorTheme")) || "light";
+
     if (localStorage.getItem("drinksData")) {
         let selectedDayData = JSON.parse(localStorage.getItem("drinksData"))[dateInput.value];
         if (selectedDayData) {
@@ -168,3 +173,9 @@ dateInput.addEventListener("change", () => {
 
 getDataFromLocalStorage();
 renderDrinks(allDrinks);
+
+if (colorTheme == "dark") {
+    body.classList.add("body_dark");
+} else {
+    body.classList.remove("body_dark");
+}

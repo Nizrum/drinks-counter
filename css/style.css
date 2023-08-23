@@ -6,7 +6,7 @@
   padding: 0;
 }
 
-body {
+.body {
   height: 100dvh;
   padding: 0;
   margin: 0;
@@ -15,6 +15,40 @@ body {
   font-size: 14px;
   line-height: 17px;
   font-weight: 500;
+}
+.body_dark {
+  background-color: #222;
+  color: #fff;
+}
+.body_dark .main__date-input {
+  color: #fff;
+  border-color: #fff;
+  background-color: transparent;
+}
+.body_dark .main__date-input::-webkit-calendar-picker-indicator {
+  background-color: #fff;
+  border-radius: 3px;
+}
+.body_dark .add-popup {
+  background-color: #222;
+  color: #fff;
+}
+.body_dark .add-popup__select {
+  background-color: transparent;
+  border-color: #fff;
+  color: #fff;
+}
+.body_dark .drink__edit-button path {
+  fill: #fff;
+}
+.body_dark .drink__remove-button path {
+  fill: #fff;
+}
+.body_dark .setting-select__select {
+  background-color: transparent;
+  color: #fff;
+  border-color: #fff;
+  border-radius: 3px;
 }
 
 .main {

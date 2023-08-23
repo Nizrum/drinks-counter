@@ -6,7 +6,7 @@
     padding: 0;
 }
 
-body {
+.body {
     height: 100dvh;
     padding: 0;
     margin: 0;
@@ -15,6 +15,63 @@ body {
     font-size: 14px;
     line-height: 17px;
     font-weight: 500;
+
+    &_dark {
+        background-color: #222;
+        color: #fff;
+
+        .main {
+
+            &__date-input {
+                color: #fff;
+                border-color: #fff;
+                background-color: transparent;
+
+                &::-webkit-calendar-picker-indicator {
+                    background-color: #fff;
+                    border-radius: 3px;
+                }
+            }
+        }
+
+        .add-popup {
+            background-color: #222;
+            color: #fff;
+
+            &__select {
+                background-color: transparent;
+                border-color: #fff;
+                color: #fff;
+            }
+        }
+
+        .drink {
+
+            &__edit-button {
+
+                path {
+                    fill: #fff;
+                }
+            }
+
+            &__remove-button {
+
+                path {
+                    fill: #fff;
+                }
+            }
+        }
+
+        .setting-select {
+
+            &__select {
+                background-color: transparent;
+                color: #fff;
+                border-color: #fff;
+                border-radius: 3px;
+            }
+        }
+    }
 }
 
 .main {
