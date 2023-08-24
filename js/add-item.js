@@ -3,8 +3,12 @@ const modal = document.querySelector(".add-popup");
 const openModalButton = document.querySelector(".main__add-button");
 const closeModalButton = document.querySelector(".add-popup__cancel-button");
 const addButton = document.querySelector(".add-popup__add-button");
+const addPopupText = document.querySelector(".add-popup__text");
+const drinkTypeOptions = document.querySelectorAll(".add-popup__option_type");
 const plug = document.querySelector(".plug");
+const plugText = document.querySelector(".plug__text");
 const recentDrinksSection = document.querySelector(".recent-drinks");
+const recentDrinksTitle = document.querySelector(".recent-drinks__title");
 const drinksList = document.querySelector(".recent-drinks__list");
 const typeSelect = document.querySelector(".add-popup__select_type");
 const mlVolumeSelect = document.querySelector(".add-popup__select_ml");
@@ -14,12 +18,39 @@ const progressBar = document.querySelector(".progress-bar__bar");
 const progressCurrentVolume = document.querySelector(".progress-bar__current-volume");
 const progressTargetVolume = document.querySelector(".progress-bar__target-volume");
 const dateInput = document.querySelector(".main__date-input");
+const drinksNamesDictionary = {
+    water: {
+        en: "Water",
+        es: "Agua",
+        ru: "Вода",
+    },
+    "black tea": {
+        en: "Black tea",
+        es: "Té negro",
+        ru: "Чёрный чай",
+    },
+    "green tea": {
+        en: "Green tea",
+        es: "Té verde",
+        ru: "Зелёный чай",
+    },
+    coffee: {
+        en: "Coffee",
+        es: "Cáfe",
+        ru: "Кофе",
+    },
+    "orange juice": {
+        en: "Orange juice",
+        es: "Jugo de naranja",
+        ru: "Апельсиновый сок",
+    },
+};
 let now = new Date();
-dateInput.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getDate()}`;
 let allDrinks = [];
 let currentID = 0;
 let dailyTarget = 3000;
 let colorTheme = "light";
+let language = "en";
 
 function renderDrinks(drinks) {
     drinksList.innerHTML = "";
@@ -36,7 +67,7 @@ function renderDrinks(drinks) {
                         <img src="images/${type.replace(/ /g, "-")}.svg" alt="${type} icon" class="drink__image">
                     </div>
                     <div class="drink__info">
-                        <h3 class="drink__title">${type[0].toUpperCase() + type.slice(1)}</h3>
+                        <h3 class="drink__title">${drinksNamesDictionary[type][language]}</h3>
                         <p class="drink__time">${time}</p>
                     </div>
                     <p class="drink__amount">${volume} ${units}</p>
@@ -111,6 +142,7 @@ function getDataFromLocalStorage() {
     currentID = 0;
     dailyTarget = JSON.parse(localStorage.getItem("dailyTarget")) || 3000;
     colorTheme = JSON.parse(localStorage.getItem("colorTheme")) || "light";
+    language = JSON.parse(localStorage.getItem("language")) || "en";
 
     if (localStorage.getItem("drinksData")) {
         let selectedDayData = JSON.parse(localStorage.getItem("drinksData"))[dateInput.value];
@@ -142,7 +174,13 @@ openModalButton.addEventListener("click", () => {
 addButton.addEventListener("click", () => {
     if (addButton.dataset.role == "edit") {
         addButton.dataset.role = "add";
-        addButton.textContent = "Add";
+        if (language == "en") {
+            addButton.textContent = "Add";
+        } else if (language == "ru") {
+            addButton.textContent = "Добавить";
+        } else if (language == "es") {
+            addButton.textContent = "Agregar";
+        }
         changeDrink(addButton.dataset.editID, typeSelect.value, Number(mlVolumeSelect.value));
     } else {
         addDrink(typeSelect.value, Number(mlVolumeSelect.value), "ml", new Date());
@@ -157,7 +195,13 @@ drinksList.addEventListener("click", (event) => {
     }
     if (target.closest(".drink__edit-button")) {
         addButton.dataset.role = "edit";
-        addButton.textContent = "Save";
+        if (language == "en") {
+            addButton.textContent = "Save";
+        } else if (language == "ru") {
+            addButton.textContent = "Сохранить";
+        } else if (language == "es") {
+            addButton.textContent = "Guardar";
+        }
         let currentDrink = allDrinks.filter((drink) => drink.id == target.closest(".drink").dataset.id)[0];
         typeSelect.value = currentDrink.type;
         mlVolumeSelect.value = currentDrink.volume;
@@ -171,6 +215,7 @@ dateInput.addEventListener("change", () => {
     renderDrinks(allDrinks);
 });
 
+dateInput.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getDate()}`;
 getDataFromLocalStorage();
 renderDrinks(allDrinks);
 
@@ -178,4 +223,42 @@ if (colorTheme == "dark") {
     body.classList.add("body_dark");
 } else {
     body.classList.remove("body_dark");
+}
+
+if (language == "ru") {
+    plugText.textContent = "Вы ещё не добавили напитки";
+    openModalButton.textContent = "Добавить напиток";
+    addPopupText.textContent = "Выберите напиток и объём";
+    addButton.textContent = "Добавить";
+    recentDrinksTitle.textContent = "Недавние напитки";
+    closeModalButton.textContent = "Отменить";
+    drinkTypeOptions[0].textContent = "Вода";
+    drinkTypeOptions[1].textContent = "Чёрный чай";
+    drinkTypeOptions[2].textContent = "Зелёный чай";
+    drinkTypeOptions[3].textContent = "Кофе";
+    drinkTypeOptions[4].textContent = "Апельсиновый сок";
+} else if (language == "en") {
+    plugText.textContent = "You haven't added any drinks yet";
+    openModalButton.textContent = "Add a drink";
+    addPopupText.textContent = "Select the drink and the volume";
+    addButton.textContent = "Add";
+    recentDrinksTitle.textContent = "Recent drinks";
+    closeModalButton.textContent = "Cancel";
+    drinkTypeOptions[0].textContent = "Water";
+    drinkTypeOptions[1].textContent = "Black tea";
+    drinkTypeOptions[2].textContent = "Green tea";
+    drinkTypeOptions[3].textContent = "Coffee";
+    drinkTypeOptions[4].textContent = "Orange juice";
+} else if (language == "es") {
+    plugText.textContent = "Aún no se agregan bebidas";
+    openModalButton.textContent = "Agregar una bebida";
+    addPopupText.textContent = "Seleccione el tipo de bebida y el volumen";
+    addButton.textContent = "Agregar";
+    recentDrinksTitle.textContent = "Bebidas recientes";
+    closeModalButton.textContent = "Cancelar";
+    drinkTypeOptions[0].textContent = "Agua";
+    drinkTypeOptions[1].textContent = "Té negro";
+    drinkTypeOptions[2].textContent = "Té verde";
+    drinkTypeOptions[3].textContent = "Café";
+    drinkTypeOptions[4].textContent = "Jugo de naranja";
 }
