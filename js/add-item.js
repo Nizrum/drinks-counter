@@ -129,7 +129,7 @@ function changeDrink(id, type, volume) {
             drink.type = type;
             if (units == "ml") {
                 drink.mlVolume = volume;
-                drink.ozVolume = volume / 30;
+                drink.ozVolume = Math.round(volume / 30);
             } else {
                 drink.mlVolume = volume * 30;
                 drink.ozVolume = volume;
