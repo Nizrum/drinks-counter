@@ -11,12 +11,12 @@ const recentDrinksSection = document.querySelector(".recent-drinks");
 const recentDrinksTitle = document.querySelector(".recent-drinks__title");
 const drinksList = document.querySelector(".recent-drinks__list");
 const typeSelect = document.querySelector(".add-popup__select_type");
-const mlVolumeSelect = document.querySelector(".add-popup__select_ml");
-const ozVolumeSelect = document.querySelector(".add-popup__select_oz");
+const mlVolumeSelect = document.querySelector(".add-popup__select_volume");
 const progressContainer = document.querySelector(".progress-bar");
 const progressBar = document.querySelector(".progress-bar__bar");
 const progressCurrentVolume = document.querySelector(".progress-bar__current-volume");
 const progressTargetVolume = document.querySelector(".progress-bar__target-volume");
+const progressUnits = document.querySelector(".progress-bar__units");
 const dateInput = document.querySelector(".main__date-input");
 const drinksNamesDictionary = {
     water: {
@@ -51,6 +51,7 @@ let currentID = 0;
 let dailyTarget = 3000;
 let colorTheme = "light";
 let language = "en";
+let units = "ml";
 
 function renderDrinks(drinks) {
     drinksList.innerHTML = "";
@@ -58,7 +59,7 @@ function renderDrinks(drinks) {
         plug.classList.add("plug_hidden");
         recentDrinksSection.classList.remove("recent-drinks_hidden");
         let totalVolume = 0;
-        for (let { id, type, volume, units, time } of drinks) {
+        for (let { id, type, mlVolume, ozVolume, time } of drinks) {
             drinksList.insertAdjacentHTML(
                 "afterbegin",
                 `
@@ -70,7 +71,7 @@ function renderDrinks(drinks) {
                         <h3 class="drink__title">${drinksNamesDictionary[type][language]}</h3>
                         <p class="drink__time">${time}</p>
                     </div>
-                    <p class="drink__amount">${volume} ${units}</p>
+                    <p class="drink__amount">${units == "ml" ? mlVolume : ozVolume} ${units}</p>
                     <button class="drink__edit-button">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -88,7 +89,7 @@ function renderDrinks(drinks) {
                 </li>
             `
             );
-            totalVolume += volume;
+            totalVolume += units == "ml" ? mlVolume : ozVolume;
         }
         changeProgressBar(totalVolume);
     } else {
@@ -98,14 +99,19 @@ function renderDrinks(drinks) {
     }
 }
 
-function addDrink(type, volume, units, time) {
-    allDrinks.push({
-        id: currentID,
-        type,
-        volume,
-        units,
-        time: `${time.getHours()}:${String(time.getMinutes()).padStart(2, "0")}`,
-    });
+function addDrink(type, volume, time) {
+    let newDrink = {};
+    newDrink.id = currentID;
+    newDrink.type = type;
+    newDrink.time = `${time.getHours()}:${String(time.getMinutes()).padStart(2, "0")}`;
+    if (units == "ml") {
+        newDrink.mlVolume = volume;
+        newDrink.ozVolume = Math.round(volume / 30);
+    } else {
+        newDrink.mlVolume = volume * 30;
+        newDrink.ozVolume = volume;
+    }
+    allDrinks.push(newDrink);
     currentID++;
     renderDrinks(allDrinks);
     saveToLocalStorage(allDrinks);
@@ -121,7 +127,13 @@ function changeDrink(id, type, volume) {
     for (let drink of allDrinks) {
         if (drink.id == id) {
             drink.type = type;
-            drink.volume = volume;
+            if (units == "ml") {
+                drink.mlVolume = volume;
+                drink.ozVolume = volume / 30;
+            } else {
+                drink.mlVolume = volume * 30;
+                drink.ozVolume = volume;
+            }
             break;
         }
     }
@@ -131,10 +143,11 @@ function changeDrink(id, type, volume) {
 
 function changeProgressBar(volume) {
     progressTargetVolume.textContent = dailyTarget;
+    progressCurrentVolume.textContent = volume;
+    progressUnits.textContent = units;
     let newWidth = (volume / dailyTarget) * progressContainer.clientWidth;
     progressBar.style.width =
         String(newWidth <= progressContainer.clientWidth ? newWidth : progressContainer.clientWidth) + "px";
-    progressCurrentVolume.textContent = volume;
 }
 
 function getDataFromLocalStorage() {
@@ -143,6 +156,7 @@ function getDataFromLocalStorage() {
     dailyTarget = JSON.parse(localStorage.getItem("dailyTarget")) || 3000;
     colorTheme = JSON.parse(localStorage.getItem("colorTheme")) || "light";
     language = JSON.parse(localStorage.getItem("language")) || "en";
+    units = JSON.parse(localStorage.getItem("units")) || "ml";
 
     if (localStorage.getItem("drinksData")) {
         let selectedDayData = JSON.parse(localStorage.getItem("drinksData"))[dateInput.value];
@@ -183,7 +197,7 @@ addButton.addEventListener("click", () => {
         }
         changeDrink(addButton.dataset.editID, typeSelect.value, Number(mlVolumeSelect.value));
     } else {
-        addDrink(typeSelect.value, Number(mlVolumeSelect.value), "ml", new Date());
+        addDrink(typeSelect.value, Number(mlVolumeSelect.value), new Date());
     }
     modal.close();
 });
@@ -204,7 +218,10 @@ drinksList.addEventListener("click", (event) => {
         }
         let currentDrink = allDrinks.filter((drink) => drink.id == target.closest(".drink").dataset.id)[0];
         typeSelect.value = currentDrink.type;
-        mlVolumeSelect.value = currentDrink.volume;
+        mlVolumeSelect.value = units == "ml" ? currentDrink.mlVolume : currentDrink.ozVolume;
+        if (mlVolumeSelect.value == "") {
+            mlVolumeSelect.value = units == "ml" ? 20 : 1;
+        }
         addButton.dataset.editID = currentDrink.id;
         modal.showModal();
     }
@@ -261,4 +278,52 @@ if (language == "ru") {
     drinkTypeOptions[2].textContent = "Té verde";
     drinkTypeOptions[3].textContent = "Café";
     drinkTypeOptions[4].textContent = "Jugo de naranja";
+}
+
+if (units == "ml") {
+    mlVolumeSelect.innerHTML = `
+        <option value="20">20 ml</option>
+        <option value="50">50 ml</option>
+        <option value="100">100 ml</option>
+        <option value="150">150 ml</option>
+        <option value="200">200 ml</option>
+        <option value="250">250 ml</option>
+        <option value="300">300 ml</option>
+        <option value="330">330 ml</option>
+        <option value="350">350 ml</option>
+        <option value="400">400 ml</option>
+        <option value="450">450 ml</option>
+        <option value="500">500 ml</option>
+        <option value="600">600 ml</option>
+        <option value="700">700 ml</option>
+        <option value="800">800 ml</option>
+        <option value="900">900 ml</option>
+        <option value="1000">1000 ml</option>
+        <option value="1500">1500 ml</option>
+        <option value="2000">2000 ml</option>
+    `;
+} else {
+    mlVolumeSelect.innerHTML = `
+        <option value="1">1 oz</option>
+        <option value="2">2 oz</option>
+        <option value="3">3 oz</option>
+        <option value="4">4 oz</option>
+        <option value="5">5 oz</option>
+        <option value="6">6 oz</option>
+        <option value="7">7 oz</option>
+        <option value="8">8 oz</option>
+        <option value="10">10 oz</option>
+        <option value="11">11 oz</option>
+        <option value="12">12 oz</option>
+        <option value="13">13 oz</option>
+        <option value="15">15 oz</option>
+        <option value="16">16 oz</option>
+        <option value="20">20 oz</option>
+        <option value="24">24 oz</option>
+        <option value="28">28 oz</option>
+        <option value="30">30 oz</option>
+        <option value="32">32 oz</option>
+        <option value="64">64 oz</option>
+        <option value="128">128 oz</option>
+    `;
 }
