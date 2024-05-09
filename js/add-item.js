@@ -7,6 +7,7 @@ const addPopupText = document.querySelector(".add-popup__text");
 const drinkTypeOptions = document.querySelectorAll(".add-popup__option_type");
 const plug = document.querySelector(".plug");
 const plugText = document.querySelector(".plug__text");
+const mainStatsSection = document.querySelector(".main__stats");
 const recentDrinksSection = document.querySelector(".recent-drinks");
 const recentDrinksTitle = document.querySelector(".recent-drinks__title");
 const drinksList = document.querySelector(".recent-drinks__list");
@@ -18,6 +19,8 @@ const progressCurrentVolume = document.querySelector(".progress-bar__current-vol
 const progressTargetVolume = document.querySelector(".progress-bar__target-volume");
 const progressUnits = document.querySelector(".progress-bar__units");
 const dateInput = document.querySelector(".main__date-input");
+const caloriesAmountStats = document.querySelector(".statistic__amount_calories");
+const caffeineAmountStats = document.querySelector(".statistic__amount_caffeine");
 const drinksNamesDictionary = {
     water: {
         en: "Water",
@@ -39,11 +42,137 @@ const drinksNamesDictionary = {
         es: "Cáfe",
         ru: "Кофе",
     },
-    "orange juice": {
-        en: "Orange juice",
-        es: "Jugo de naranja",
-        ru: "Апельсиновый сок",
+    juice: {
+        en: "Juice",
+        es: "Jugo",
+        ru: "Сок",
     },
+    lemonade: {
+        en: "Lemonade",
+        es: "Limonada",
+        ru: "Лимонад",
+    },
+    kompot: {
+        en: "Kompot",
+        es: "Compota",
+        ru: "Компот",
+    },
+    milk: {
+        en: "Milk",
+        es: "Leche",
+        ru: "Молоко",
+    },
+    "mineral water": {
+        en: "Mineral water",
+        es: "Agua mineral",
+        ru: "Минеральная вода",
+    },
+    "decaf coffee": {
+        en: "Decaf coffee",
+        es: "Cáfe descafeinado",
+        ru: "Кофе без кофеина",
+    },
+    cacao: {
+        en: "Cacao",
+        es: "Cacao",
+        ru: "Какао",
+    },
+    "hot chocolate": {
+        en: "Hot chocolate",
+        es: "Chocolate caliente",
+        ru: "Горячий шоколад",
+    },
+    yogurt: {
+        en: "Yogurt",
+        es: "Yogur",
+        ru: "Йогурт",
+    },
+    kefir: {
+        en: "Kefir",
+        es: "Kefir",
+        ru: "Кефир",
+    },
+    kvass: {
+        en: "Kvass",
+        es: "Kvas",
+        ru: "Квас",
+    },
+    kissel: {
+        en: "Kissel",
+        es: "Kisel",
+        ru: "Кисель",
+    },
+    "energy drink": {
+        en: "Energy drink",
+        es: "Bebida energética",
+        ru: "Энергетик",
+    },
+    beer: {
+        en: "Beer",
+        es: "Cerveza",
+        ru: "Пиво",
+    },
+    "non-alcoholic beer": {
+        en: "Non-alcoholic beer",
+        es: "Cerveza sin alcohol",
+        ru: "Безалкогольное пиво",
+    },
+    wine: {
+        en: "Wine",
+        es: "Vino",
+        ru: "Вино",
+    },
+    "strong alcohol": {
+        en: "Strong alcohol",
+        es: "Alcohol fuerte",
+        ru: "Крепкий алкоголь",
+    },
+};
+const caloriesAmounts = {
+    water: 0,
+    "black tea": 1,
+    "green tea": 1,
+    coffee: 1,
+    juice: 45,
+    lemonade: 30,
+    kompot: 55,
+    milk: 60,
+    "mineral water": 0,
+    "decaf coffee": 1,
+    cacao: 85,
+    "hot chocolate": 85,
+    yogurt: 70,
+    kefir: 51,
+    kvass: 32,
+    kissel: 50,
+    "energy drink": 45,
+    beer: 40,
+    "non-alcoholic beer": 20,
+    wine: 80,
+    "strong alcohol": 220,
+};
+const caffeineAmounts = {
+    water: 0,
+    "black tea": 30,
+    "green tea": 25,
+    coffee: 65,
+    juice: 0,
+    lemonade: 10,
+    kompot: 0,
+    milk: 60,
+    "mineral water": 0,
+    "decaf coffee": 1,
+    cacao: 7,
+    "hot chocolate": 2,
+    yogurt: 0,
+    kefir: 0,
+    kvass: 0,
+    kissel: 0,
+    "energy drink": 32,
+    beer: 0,
+    "non-alcoholic beer": 0,
+    wine: 0,
+    "strong alcohol": 0,
 };
 let now = new Date();
 let allDrinks = [];
@@ -58,7 +187,10 @@ function renderDrinks(drinks) {
     if (drinks.length != 0) {
         plug.classList.add("plug_hidden");
         recentDrinksSection.classList.remove("recent-drinks_hidden");
+        mainStatsSection.classList.remove("main__stats_hidden");
         let totalVolume = 0;
+        let totalCalories = 0;
+        let totalCaffeine = 0;
         for (let { id, type, mlVolume, ozVolume, time } of drinks) {
             drinksList.insertAdjacentHTML(
                 "afterbegin",
@@ -90,11 +222,16 @@ function renderDrinks(drinks) {
             `
             );
             totalVolume += units == "ml" ? mlVolume : ozVolume;
+            totalCalories += Math.round((mlVolume / 100) * caloriesAmounts[type]);
+            totalCaffeine += Math.round((mlVolume / 100) * caffeineAmounts[type]);
+            caloriesAmountStats.textContent = totalCalories;
+            caffeineAmountStats.textContent = totalCaffeine;
         }
         changeProgressBar(totalVolume);
     } else {
         plug.classList.remove("plug_hidden");
         recentDrinksSection.classList.add("recent-drinks_hidden");
+        mainStatsSection.classList.add("main__stats_hidden");
         changeProgressBar(0);
     }
 }
@@ -232,7 +369,10 @@ dateInput.addEventListener("change", () => {
     renderDrinks(allDrinks);
 });
 
-dateInput.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getDate()}`;
+dateInput.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(
+    2,
+    "0"
+)}`;
 getDataFromLocalStorage();
 renderDrinks(allDrinks);
 
@@ -249,11 +389,9 @@ if (language == "ru") {
     addButton.textContent = "Добавить";
     recentDrinksTitle.textContent = "Недавние напитки";
     closeModalButton.textContent = "Отменить";
-    drinkTypeOptions[0].textContent = "Вода";
-    drinkTypeOptions[1].textContent = "Чёрный чай";
-    drinkTypeOptions[2].textContent = "Зелёный чай";
-    drinkTypeOptions[3].textContent = "Кофе";
-    drinkTypeOptions[4].textContent = "Апельсиновый сок";
+    drinkTypeOptions.forEach((drink) => {
+        drink.textContent = drinksNamesDictionary[drink.value].ru;
+    });
 } else if (language == "en") {
     plugText.textContent = "You haven't added any drinks yet";
     openModalButton.textContent = "Add a drink";
@@ -261,11 +399,9 @@ if (language == "ru") {
     addButton.textContent = "Add";
     recentDrinksTitle.textContent = "Recent drinks";
     closeModalButton.textContent = "Cancel";
-    drinkTypeOptions[0].textContent = "Water";
-    drinkTypeOptions[1].textContent = "Black tea";
-    drinkTypeOptions[2].textContent = "Green tea";
-    drinkTypeOptions[3].textContent = "Coffee";
-    drinkTypeOptions[4].textContent = "Orange juice";
+    drinkTypeOptions.forEach((drink) => {
+        drink.textContent = drinksNamesDictionary[drink.value].en;
+    });
 } else if (language == "es") {
     plugText.textContent = "Aún no se agregan bebidas";
     openModalButton.textContent = "Agregar una bebida";
@@ -273,11 +409,9 @@ if (language == "ru") {
     addButton.textContent = "Agregar";
     recentDrinksTitle.textContent = "Bebidas recientes";
     closeModalButton.textContent = "Cancelar";
-    drinkTypeOptions[0].textContent = "Agua";
-    drinkTypeOptions[1].textContent = "Té negro";
-    drinkTypeOptions[2].textContent = "Té verde";
-    drinkTypeOptions[3].textContent = "Café";
-    drinkTypeOptions[4].textContent = "Jugo de naranja";
+    drinkTypeOptions.forEach((drink) => {
+        drink.textContent = drinksNamesDictionary[drink.value].es;
+    });
 }
 
 if (units == "ml") {

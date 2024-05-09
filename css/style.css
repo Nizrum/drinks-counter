@@ -15,6 +15,7 @@
   font-size: 14px;
   line-height: 17px;
   font-weight: 500;
+  overflow: hidden;
 }
 .body_dark {
   background-color: #222;
@@ -70,6 +71,8 @@
   left: -1000px;
 }
 .main__date-input {
+  height: 30px;
+  flex-shrink: 0;
   font-family: "Inter", sans-serif;
   padding: 8px 18px;
   font-size: 14px;
@@ -81,13 +84,16 @@
   cursor: pointer;
   margin-bottom: 20px;
 }
-.main__plug {
-  margin-top: calc(50dvh - 211.5px);
-  margin-bottom: calc(50dvh - 211.5px);
+.main__stats {
+  width: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
-.main__recent-drinks {
-  margin-top: 35px;
-  margin-bottom: auto;
+.main__stats_hidden {
+  display: none;
 }
 .main__add-button {
   width: 100%;
@@ -109,6 +115,20 @@
 }
 .main__add-button:active {
   color: rgba(255, 255, 255, 0.5);
+}
+
+.statistic {
+  display: flex;
+  align-items: center;
+}
+.statistic__icon {
+  width: 35px;
+  margin-right: 12px;
+}
+.statistic__text {
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 600;
 }
 
 .progress-bar {
@@ -138,6 +158,12 @@
   color: #fff;
 }
 
+.plug {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .plug__image {
   width: 100px;
   margin-bottom: 25px;
@@ -153,9 +179,10 @@
 }
 
 .recent-drinks {
+  height: 100%;
   width: 100%;
+  overflow-y: hidden;
   text-align: left;
-  overflow-y: scroll;
 }
 .recent-drinks__title {
   font-size: 16px;
@@ -164,6 +191,8 @@
   margin-bottom: 20px;
 }
 .recent-drinks__list {
+  height: 100%;
+  overflow-y: scroll;
   list-style: none;
 }
 .recent-drinks__drink {
@@ -181,6 +210,9 @@
   align-items: center;
 }
 .drink__image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 30px;
   text-align: left;
   margin-right: 15px;
@@ -310,6 +342,7 @@
 }
 .menu__link {
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 .menu__link:hover path {
   fill: #006dd2;

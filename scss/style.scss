@@ -15,6 +15,7 @@
     font-size: 14px;
     line-height: 17px;
     font-weight: 500;
+    overflow: hidden;
 
     &_dark {
         background-color: #222;
@@ -94,6 +95,8 @@
     }
 
     &__date-input {
+        height: 30px;
+        flex-shrink: 0;
         font-family: 'Inter', sans-serif;
         padding: 8px 18px;
         font-size: 14px;
@@ -106,14 +109,17 @@
         margin-bottom: 20px;
     }
 
-    &__plug {
-        margin-top: calc(50dvh - 211.5px);
-        margin-bottom: calc(50dvh - 211.5px);
-    }
+    &__stats {
+        width: 70%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 25px;
+        margin-bottom: 25px;
 
-    &__recent-drinks {
-        margin-top: 35px;
-        margin-bottom: auto;
+        &_hidden {
+            display: none;
+        }
     }
 
     &__add-button {
@@ -138,6 +144,22 @@
         &:active {
             color: rgba(255, 255, 255, 0.5);
         }
+    }
+}
+
+.statistic {
+    display: flex;
+    align-items: center;
+
+    &__icon {
+        width: 35px;
+        margin-right: 12px;
+    }
+
+    &__text {
+        font-size: 16px;
+        line-height: 19px;
+        font-weight: 600;
     }
 }
 
@@ -171,6 +193,10 @@
 }
 
 .plug {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &__image {
         width: 100px;
@@ -190,9 +216,10 @@
 }
 
 .recent-drinks {
+    height: 100%;
     width: 100%;
+    overflow-y: hidden;
     text-align: left;
-    overflow-y: scroll;
 
     &__title {
         font-size: 16px;
@@ -202,6 +229,8 @@
     }
 
     &__list {
+        height: 100%;
+        overflow-y: scroll;
         list-style: none;
     }
 
@@ -223,6 +252,9 @@
     align-items: center;
 
     &__image-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 30px;
         text-align: left;
         margin-right: 15px;
@@ -374,6 +406,7 @@
 
     &__link {
         text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
 
         &:hover {
 
