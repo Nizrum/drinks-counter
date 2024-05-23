@@ -141,14 +141,24 @@
   overflow: hidden;
 }
 .progress-bar__bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
   width: 0;
   height: 100%;
-  background-color: #006dd2;
   border-radius: 10px 10px 10px 10px;
   transition: width 0.2s;
 }
+.progress-bar__bar_water {
+  background-color: #006dd2;
+}
+.progress-bar__bar_total {
+  background-color: #b85ffc;
+}
 .progress-bar__label {
   position: absolute;
+  z-index: 2;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -400,11 +410,22 @@
   margin-bottom: 20px;
 }
 .period-stats__columns {
+  height: 115px;
   list-style: none;
   padding: 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  overflow-x: scroll;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+.period-stats__column {
+  flex-shrink: 0;
+  margin-right: 15px;
+}
+.period-stats__column:last-child {
+  margin-right: 0;
 }
 
 .select {
@@ -464,14 +485,64 @@
   transition: all 0.2s;
 }
 
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .column__value {
   margin-bottom: 3px;
 }
 .column__bar {
   width: 30px;
-  height: 75px;
   background-color: #006dd2;
   margin-bottom: 3px;
+}
+.column_active .column__bar {
+  background-color: #0056A5;
+}
+
+.day-stats {
+  display: none;
+}
+.day-stats__list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+}
+.day-stats_active {
+  display: block;
+}
+
+.day-stat {
+  position: relative;
+  padding-left: 12px;
+  text-align-last: left;
+  font-size: 14px;
+  line-height: 16px;
+}
+.day-stat::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #006dd2;
+  border-radius: 1px;
+}
+.day-stat:first-child::before {
+  background-color: #b85ffc;
+}
+.day-stat:nth-child(3)::before {
+  background-color: #F9B301;
+}
+.day-stat:nth-child(4)::before {
+  background-color: #592007;
+}
+.day-stat__title {
+  margin-bottom: 5px;
 }
 
 .frequency-stats {
@@ -486,10 +557,8 @@
   margin-bottom: 20px;
 }
 .frequency-stats__diagram {
-  width: 240px;
-  height: 240px;
-  background-color: #006dd2;
-  border-radius: 50%;
+  width: 100%;
+  height: 300px;
 }
 
 .settings {

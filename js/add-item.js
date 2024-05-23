@@ -14,7 +14,8 @@ const drinksList = document.querySelector(".recent-drinks__list");
 const typeSelect = document.querySelector(".add-popup__select_type");
 const mlVolumeSelect = document.querySelector(".add-popup__select_volume");
 const progressContainer = document.querySelector(".progress-bar");
-const progressBar = document.querySelector(".progress-bar__bar");
+const progressBar = document.querySelector(".progress-bar__bar_total");
+const progressBarWater = document.querySelector(".progress-bar__bar_water");
 const progressCurrentVolume = document.querySelector(".progress-bar__current-volume");
 const progressTargetVolume = document.querySelector(".progress-bar__target-volume");
 const progressUnits = document.querySelector(".progress-bar__units");
@@ -174,6 +175,29 @@ const caffeineAmounts = {
     wine: 0,
     "strong alcohol": 0,
 };
+const waterAmounts = {
+    water: 1,
+    "black tea": 0.85,
+    "green tea": 0.85,
+    coffee: 0.8,
+    juice: 0.9,
+    lemonade: 0.6,
+    kompot: 0.7,
+    milk: 0.8,
+    "mineral water": 1,
+    "decaf coffee": 0.85,
+    cacao: 0.65,
+    "hot chocolate": 0.4,
+    yogurt: 0.5,
+    kefir: 0.6,
+    kvass: 0.7,
+    kissel: 0.6,
+    "energy drink": 0.4,
+    beer: -0.6,
+    "non-alcoholic beer": 0.6,
+    wine: -1.6,
+    "strong alcohol": -3.5,
+};
 let now = new Date();
 let allDrinks = [];
 let currentID = 0;
@@ -189,6 +213,7 @@ function renderDrinks(drinks) {
         recentDrinksSection.classList.remove("recent-drinks_hidden");
         mainStatsSection.classList.remove("main__stats_hidden");
         let totalVolume = 0;
+        let waterVolume = 0;
         let totalCalories = 0;
         let totalCaffeine = 0;
         for (let { id, type, mlVolume, ozVolume, time } of drinks) {
@@ -222,17 +247,18 @@ function renderDrinks(drinks) {
             `
             );
             totalVolume += units == "ml" ? mlVolume : ozVolume;
+            waterVolume += (units == "ml" ? mlVolume : ozVolume) * waterAmounts[type];
             totalCalories += Math.round((mlVolume / 100) * caloriesAmounts[type]);
             totalCaffeine += Math.round((mlVolume / 100) * caffeineAmounts[type]);
             caloriesAmountStats.textContent = totalCalories;
             caffeineAmountStats.textContent = totalCaffeine;
         }
-        changeProgressBar(totalVolume);
+        changeProgressBar(Math.round(totalVolume), Math.round(waterVolume));
     } else {
         plug.classList.remove("plug_hidden");
         recentDrinksSection.classList.add("recent-drinks_hidden");
         mainStatsSection.classList.add("main__stats_hidden");
-        changeProgressBar(0);
+        changeProgressBar(0, 0);
     }
 }
 
@@ -278,12 +304,15 @@ function changeDrink(id, type, volume) {
     saveToLocalStorage(allDrinks);
 }
 
-function changeProgressBar(volume) {
+function changeProgressBar(totalVolume, waterVolume) {
     progressTargetVolume.textContent = dailyTarget;
-    progressCurrentVolume.textContent = volume;
+    progressCurrentVolume.textContent = waterVolume;
     progressUnits.textContent = units;
-    let newWidth = (volume / dailyTarget) * progressContainer.clientWidth;
+    let newWidth = (totalVolume / dailyTarget) * progressContainer.clientWidth;
     progressBar.style.width =
+        String(newWidth <= progressContainer.clientWidth ? newWidth : progressContainer.clientWidth) + "px";
+    newWidth = waterVolume < 0 ? 0 : (waterVolume / dailyTarget) * progressContainer.clientWidth;
+    progressBarWater.style.width =
         String(newWidth <= progressContainer.clientWidth ? newWidth : progressContainer.clientWidth) + "px";
 }
 
@@ -309,6 +338,26 @@ function saveToLocalStorage(drinks) {
     data[dateInput.value] = {};
     data[dateInput.value]["drinksList"] = drinks;
     data[dateInput.value]["currentID"] = currentID;
+    let totalVolumeMl = 0;
+    let totalVolumeOz = 0;
+    let waterVolumeMl = 0;
+    let waterVolumeOz = 0;
+    let totalCalories = 0;
+    let totalCaffeine = 0;
+    for (let drink of drinks) {
+        totalVolumeMl += drink.mlVolume;
+        totalVolumeOz += drink.ozVolume;
+        waterVolumeMl += drink.mlVolume * waterAmounts[drink.type];
+        waterVolumeOz += drink.ozVolume * waterAmounts[drink.type];
+        totalCalories += drink.mlVolume / 100 * caloriesAmounts[drink.type];
+        totalCaffeine += drink.mlVolume / 100 * caffeineAmounts[drink.type];
+    }
+    data[dateInput.value]["totalVolumeMl"] = totalVolumeMl;
+    data[dateInput.value]["totalVolumeOz"] = totalVolumeOz;
+    data[dateInput.value]["waterVolumeMl"] = waterVolumeMl;
+    data[dateInput.value]["waterVolumeOz"] = waterVolumeOz;
+    data[dateInput.value]["caloriesAmount"] = totalCalories;
+    data[dateInput.value]["caffeineAmount"] = totalCaffeine;
     localStorage.setItem("drinksData", JSON.stringify(data));
 }
 
