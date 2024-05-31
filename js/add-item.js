@@ -349,8 +349,8 @@ function saveToLocalStorage(drinks) {
         totalVolumeOz += drink.ozVolume;
         waterVolumeMl += drink.mlVolume * waterAmounts[drink.type];
         waterVolumeOz += drink.ozVolume * waterAmounts[drink.type];
-        totalCalories += drink.mlVolume / 100 * caloriesAmounts[drink.type];
-        totalCaffeine += drink.mlVolume / 100 * caffeineAmounts[drink.type];
+        totalCalories += (drink.mlVolume / 100) * caloriesAmounts[drink.type];
+        totalCaffeine += (drink.mlVolume / 100) * caffeineAmounts[drink.type];
     }
     data[dateInput.value]["totalVolumeMl"] = totalVolumeMl;
     data[dateInput.value]["totalVolumeOz"] = totalVolumeOz;
@@ -364,7 +364,13 @@ function saveToLocalStorage(drinks) {
 closeModalButton.addEventListener("click", () => {
     modal.close();
     addButton.dataset.role = "add";
-    addButton.textContent = "Add";
+    if (language == "en") {
+        addButton.textContent = "Add";
+    } else if (language == "ru") {
+        addButton.textContent = "Добавить";
+    } else if (language == "es") {
+        addButton.textContent = "Agregar";
+    }
 });
 
 openModalButton.addEventListener("click", () => {
